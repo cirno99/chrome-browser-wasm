@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import init, { greet } from "../../wasm/pkg"
+import { onMounted } from 'vue';
 
-init().then(() => {
-    greet("Chrome Extension")
+onMounted(() => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0].id === undefined) return;
+        chrome.tabs.sendMessage<{}, { innerText: string}>(tabs[0].id, {}, (response) => {
+            console.log(response.innerText);
+        });
+    });
 })
 </script>
 
