@@ -3,11 +3,13 @@ import { onMounted, ref } from 'vue';
 import init, { find } from "../../wasm/pkg"
 
 const targetContent = ref<string>("");
+const query = ref<string>("");
 const searchResult = ref<string[]>([]);
 
 const handleClick = async () => {
     await init();
-    searchResult.value = find(targetContent.value, "query");
+    const result =  find(targetContent.value, query.value);
+    searchResult.value = result;
 }
 
 onMounted(() => {
@@ -24,6 +26,7 @@ onMounted(() => {
     <div>
         <h1>Popup!</h1>
 
+        <input v-model="query" type="text" placeholder="Search" />
         <button @click="handleClick">CLICK</button>
 
         <ul>
