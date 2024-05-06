@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+import init, { find } from "../../wasm/pkg"
+
+const targetContent = ref<string>("");
+const searchResult = ref<string[]>([]);
+
+const handleClick = async () => {
+    await init();
+    searchResult.value = find(targetContent.value, "query");
+}
 
 onMounted(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs[0].id === undefined) return;
         chrome.tabs.sendMessage<{}, { innerText: string}>(tabs[0].id, {}, (response) => {
-            console.log(response.innerText);
+            targetContent.value = response.innerText;
         });
     });
 })
@@ -14,5 +23,11 @@ onMounted(() => {
 <template>
     <div>
         <h1>Popup!</h1>
+
+        <button @click="handleClick">CLICK</button>
+
+        <ul>
+            <li v-for="result in searchResult" :key="result">{{ result }}</li>
+        </ul>
     </div>
 </template>
