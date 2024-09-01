@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "Vue.volar",
     "rust-lang.rust-analyzer"
   ]
 }

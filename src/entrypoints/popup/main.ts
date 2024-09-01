@@ -1,4 +1,4 @@
-import { createApp } from "vue";
-import App from "./App.vue";
+import App from "./app.ts";
+import van from 'vanjs-core'
 
-createApp(App).mount("#app");
+van.add(document.body, App())
